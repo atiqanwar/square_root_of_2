@@ -36,8 +36,36 @@ def sqrt_2_high_precision(decimal_places):
 
 
 def main():
-    """Main function to calculate and display sqrt(2) to 10,000 decimal places"""
-    decimal_places = 10000
+    """Main function to calculate and display sqrt(2) to a user-specified number of decimal places"""
+    # Prompt the user for desired number of decimal places
+    while True:
+        user_input = input(
+            "Enter number of decimal places (positive integer, default 10000): "
+        ).strip()
+        if user_input == "":
+            decimal_places = 10000
+            print("No input provided. Using default: 10000 decimal places.")
+            break
+        try:
+            decimal_places = int(user_input)
+            if decimal_places < 0:
+                print("Please enter a non-negative integer.")
+                continue
+            # Warn if the request is very large
+            if decimal_places > 200000:
+                confirm = (
+                    input(
+                        f"You requested {decimal_places} digits. This may be slow and use a lot of memory. Continue? (y/N): "
+                    )
+                    .strip()
+                    .lower()
+                )
+                if confirm not in ("y", "yes"):
+                    print("Request cancelled. Please enter a smaller number.")
+                    continue
+            break
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
 
     print(f"Calculating square root of 2 to {decimal_places} decimal places...")
 
@@ -48,14 +76,14 @@ def main():
     result_str = str(result)
 
     # Print result with proper formatting
-    print("Square root of 2 to 10,000 decimal places:")
+    print(f"Square root of 2 to {decimal_places} decimal places:")
     print(result_str)
 
-    # Also save to file
-    with open("sqrt_2_result.txt", "w") as f:
+    # Also save to file (use utf-8 encoding to avoid platform encoding issues)
+    with open("sqrt_2_result.txt", "w", encoding="utf-8") as f:
         f.write(result_str)
 
-    print(f"\nResult also saved to 'sqrt_2_result.txt'")
+    print("\nResult also saved to 'sqrt_2_result.txt'")
     print(f"Total characters in result: {len(result_str)}")
 
 
